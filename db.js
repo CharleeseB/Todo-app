@@ -10,3 +10,21 @@ const db = pgp({
   database: process.env.DB_NAME
 });
 console.log("go to lunch");
+
+db.any(
+  `
+
+select * from todos
+
+`
+)
+  .then(data => {
+    console.log("here is the data:");
+    console.log(data);
+  })
+  .catch(err => {
+    console.log("Uh Oh.");
+    console.log(err);
+  });
+
+module.exports = db;
