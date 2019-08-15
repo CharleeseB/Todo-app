@@ -1,12 +1,13 @@
 const db = require("../db");
 
 function getAll() {
-  return db.any(
-    `
+  return db
+    .any(
+      `
 SELECT *
 FROM todos
 `
-  )
+    )
 
     .catch(error => {
       console.log(error);
@@ -14,20 +15,23 @@ FROM todos
   // console.log(db)
 }
 function getOne(id) {
-  db.one(
-    `
-    select * from todos where id=42
+  return (
+    db
+      .one(
+        `
+    select * from todos where id=$1
     `,
-    [id]
-  )
-    .then(data => {
-      console.log("Heres your data :");
-      console.log(data);
-    })
-    .catch(error => {
-      console.log("UH OH");
-      console.log(error);
-    });
+        [id]
+      )
+      // .then(data => {
+      //   console.log("Heres your data :");
+      //   console.log(data);
+      // })
+      .catch(error => {
+        console.log("UH OH");
+        console.log(error);
+      })
+  );
 }
 module.exports = {
   getAll,
