@@ -7,7 +7,7 @@ values
 
 
 insert into todos 
-(priority, task)
+(priority, task , user_id)
 values
 (1,'Feed the cat',1),
 (2,'pet the cat',1),
