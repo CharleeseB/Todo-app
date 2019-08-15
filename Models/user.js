@@ -1,48 +1,32 @@
 const db = require("../db");
 
-function getAll() {
-  return db
-    .any(
-      `
+async function getAll() {
+  const users = await db.any(
+    `
 select * from users
 `
-    )
-    .catch(err => {
-      console.log("error getting users.");
-      console.log(err);
-    });
+  );
+  return users;
 }
 
-function getOne(id) {
-  return db
-    .one(
-      `
+async function getOne(id) {
+  const user = await db.one(
+    `
     select * from users where id=$1
     `,
-      [id]
-    )
-    .then(user => {
-      const todos = db
-        .any(
-          `
+    [id]
+  );
+
+  const todosForuser = await db.any(
+    `
         select * from todos where user_id=$1
         `,
-          [id]
-        )
-        .then(todosForUser => {
-          console.log(todosForUser);
-          user.todos = todosForUser;
-          return user;
-        });
+    [id]
+  );
 
-      return todos;
-    })
-    .catch(err => {
-      console.log("error getting user.");
-      console.log(err);
-    });
+  user.todos = todosForuser;
+  return user;
 }
-
 module.exports = {
   getAll,
   getOne

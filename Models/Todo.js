@@ -1,38 +1,24 @@
 const db = require("../db");
 
-function getAll() {
-  return db
-    .any(
-      `
+async function getAll() {
+  const todosForAll = await db.any(
+    `
 SELECT *
 FROM todos
 `
-    )
-
-    .catch(error => {
-      console.log(error);
-    });
-  // console.log(db)
+  );
+  return todosForAll;
 }
-function getOne(id) {
-  return (
-    db
-      .one(
-        `
+async function getOne(id) {
+  const oneTodo = await db.one(
+    `
     select * from todos where id=$1
     `,
-        [id]
-      )
-      // .then(data => {
-      //   console.log("Heres your data :");
-      //   console.log(data);
-      // })
-      .catch(error => {
-        console.log("UH OH");
-        console.log(error);
-      })
+    [id]
   );
+  return oneTodo;
 }
+
 module.exports = {
   getAll,
   getOne
