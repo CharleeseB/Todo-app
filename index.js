@@ -5,6 +5,8 @@ const app = express();
 const port = 3000;
 const user = require("./Models/user");
 
+app.use(express.urlencoded({ extended: true }));
+
 app.get("/todos", (req, res) => {
   console.log("You Got a Request!");
   const allTodos = Todo.getAll();
@@ -40,6 +42,29 @@ app.get("/users/:userId", (req, res) => {
   aUser.then(data => {
     res.json(data);
   });
+});
+
+app.post("/users", async (req, res) => {
+  console.log("we got a post request");
+
+  console.log("here is the BODY");
+  console.log(req.body);
+
+  const newUserInfo = await user.createUser({
+    displayname: req.body.displayname,
+    username: req.body.username
+  });
+  res.json(newUserInfo);
+});
+
+app.post("/users/:userId/todos", async (req, res) => {
+  const newTodo = await Todo.createTodo({
+    priority: req.body.priority,
+    task: req.body.task,
+    status: req.body.status,
+    user_id: req.body.userId
+  });
+  res.json(newTodo);
 });
 
 app.listen(port);

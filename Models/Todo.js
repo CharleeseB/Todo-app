@@ -19,7 +19,24 @@ async function getOne(id) {
   return oneTodo;
 }
 
+async function createTodo({ priority, task, status, user_id }) {
+  const todo = await db.one(
+    `
+  insert into todos 
+  (priority,task,status,user_id)
+  values ($1,$2,$3,$4)
+
+
+  returning id
+  `,
+    [priority, task, status, user_id]
+  );
+  console.log(todo.id);
+  return todo;
+}
+
 module.exports = {
   getAll,
-  getOne
+  getOne,
+  createTodo
 };
